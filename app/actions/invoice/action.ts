@@ -7,9 +7,7 @@ import { redirect } from "next/navigation";
 
 const FormSchema = z.object({
   id: z.string(),
-  customerId: z.string({
-    invalid_type_error: "Please enter  customer name",
-  }),
+  customerId: z.string().min(1 ,"Name cant be empty !!"),
   amount: z.coerce.number().gt(0, {
     message: "amount should be greater than zero",
   }),
@@ -52,8 +50,23 @@ export async function createInvoice(prevState: State, formData: FormData) {
 
   // sent data to  backend api 
 
+  // catch http backend specific errors
+  // Insert data into the database
+  try {
+    await `
+      INSERT INTO invoices (customer_id, amount, status, date)
+      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+    `;
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    return {
+      message: 'Database Error: Failed to Create Invoice.',
+    };
+  }
 
 
+
+    // Revalidate the cache for the invoices page and redirect the user.
   revalidatePath("/dashBoard");
   redirect("/dashboard");
 }
