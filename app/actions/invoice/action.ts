@@ -8,17 +8,33 @@ import {redirect} from "next/navigation"
 
 const FormSchema = z.object({
     id: z.string(),
-    customerId: z.string(),
-    amount : z.coerce.number(),
-    status:z.enum(['pending', 'paid']),
+    customerId: z.string({
+        invalid_type_error:"Please enter  customer name"
+    }),
+    amount : z.coerce.number().gt(0, {
+        message:"amount should be greater than zero"
+    }),
+    status:z.enum(['pending', 'paid'],{
+        invalid_type_error:"Please select an invoice status"
+    }),
     date:z.string()
 })
 
 const CreateInvoice = FormSchema.omit({id: true , date : true})
 
 
+export type State = {
+    errors?:{
+        customerId?: String[];
+        amount?:String[];
+        status?:String[];
+    };
+    message?:string | null
+}
 
-export  async  function createInvoice (formData: FormData){
+
+
+export  async  function createInvoice (prevState:State, formData: FormData){
 
     // const rawData = {
     //     userName: formData.get("userName"),
@@ -34,8 +50,23 @@ export  async  function createInvoice (formData: FormData){
 
     // await send to api 
 
+    // safe parse 
+
+    const validateFields =  CreateInvoice.safeParse(rawDataFromEntries);
+
+    if(!validateFields.success){
+        return {
+            errors:validateFields.error.flatten().fieldErrors,
+            message:'Misssing Fields . Failed to create Invoice'
+        }
+    }
+   
+
     revalidatePath("/dashBoard")
-    redirect("/dashBoard")
+    redirect("/dashboard")
+
+
+    
     
 
 
