@@ -7,7 +7,7 @@ import { createInvoice } from "@/app/actions/invoice/action";
 import { Button } from "@mui/material";
 
 export default function CreateInvoiceForm() {
-const initialState = {message :null , errors:{}}
+const initialState = {message :'' , errors:{}}
 
 const [ state , dispatch ] = useFormState(createInvoice , initialState);
 
