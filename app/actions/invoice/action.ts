@@ -45,7 +45,6 @@ export async function createInvoice(prevState: State, formData: FormData) {
       message: "Misssing Fields . Failed to create Invoice",
     };
   }
-
   // prepare data to send to api
   const { customerId, amount, status } = validateFields.data;
   const amountInCents = amount * 100;
