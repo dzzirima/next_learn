@@ -4,10 +4,6 @@ export default function Home(){
     'use server'
     
   }
-
-  
-    
-    
     return <form action={createUser}> </form>
 
   

@@ -4,6 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 // zod schema defination
+function delay(ms:number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 const FormSchema = z.object({
   id: z.string(),
@@ -34,6 +37,8 @@ export async function createInvoice(prevState: State, formData: FormData) {
   //     password: formData.get("password")
   // }
   const rawDataFromEntries = Object.fromEntries(formData.entries());
+
+  await delay( 10000)
 
   const validateFields = CreateInvoice.safeParse(rawDataFromEntries);
 

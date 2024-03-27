@@ -1,17 +1,17 @@
 'use client'
-import { useFormState } from "react-dom";
+import { useFormState , useFormStatus } from "react-dom";
 
 
 import TextField from "@mui/material/TextField";
 import { createInvoice } from "@/app/actions/invoice/action";
 import { Button } from "@mui/material";
+import SubmitButton from "../Utils/SubmitButton";
 
 export default function CreateInvoiceForm() {
 const initialState = {message :'' , errors:{}}
 
-const [ state , dispatch ] = useFormState(createInvoice , initialState);
 
-console.log(state)
+const [ state , dispatch ] = useFormState(createInvoice , initialState);
 
   return (
     <form action={dispatch}>
@@ -34,7 +34,8 @@ console.log(state)
             <p className="mt-2 text-sm text-red-500" key={error}> {error}</p>
           ))
         }
-        <Button type="submit"> Submit</Button>
+        
+        <SubmitButton label ={"Create"}/>
       </div>
     </form>
   );
